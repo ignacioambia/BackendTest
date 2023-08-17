@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "start": "node ./dist/index.js",
+    "build":"tsc",
+    "dev": "nodemon --exec ts-node ./src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -15,6 +16,17 @@
     "express": "^4.18.2"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
-  }
+    "nodemon": "^3.0.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6",
+    "@types/express": "^4.17.17"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ignacioambia/BackendTest.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ignacioambia/BackendTest/issues"
+  },
+  "homepage": "https://github.com/ignacioambia/BackendTest#readme"
 }
