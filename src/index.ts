@@ -1,15 +1,14 @@
 import express, { Request, Response } from "express";
-import testRoute from "./routes/test.routes";
 import "dotenv/config";
 import { connectToDatabase } from "./db";
+import { verifyToken } from "./middlewares/auth.middleware";
 
 const app = express();
 
-app.use("/contact", testRoute);
+app.use(express.json());
 
-app.get("/test", (request: Request, response: Response) => {
-  response.send("Hola mundo!");
-});
+import authRoute from "./routes/auth.routes";
+app.use("/auth", authRoute);
 
 connectToDatabase().then(() => {
   const port = process.env.PORT || 3000;
