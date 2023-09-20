@@ -1,10 +1,10 @@
 # Authorization
 
-The `{{baseUrl}}/auth` url contains endpoints related to authentication.
+The `{{baseUrl}}/auth` URL contains endpoints related to authentication.
 
 ## Register
 
-- **Endpoint:** `{{baseUrl}}/auth/register`
+- **Endpoint:** `{{baseUrl}}/auth/register` (POST)
 
   Use this endpoint when you need to create a new user.
 
@@ -22,9 +22,9 @@ The `{{baseUrl}}/auth` url contains endpoints related to authentication.
 
 ## Login
 
-- **Endpoint:** `{{baseUrl}}/auth/login`
+- **Endpoint:** `{{baseUrl}}/auth/login` (POST)
 
-  Call this endpoint to receive a JWT token in return.
+  Call this endpoint to receive a [JWT][jwt] token in return.
 
 - **Payload:**
 
@@ -53,3 +53,5 @@ The `{{baseUrl}}/auth` url contains endpoints related to authentication.
     "error": "Password is wrong"
   }
   ```
+
+[jwt]:https://jwt.io/introduction
