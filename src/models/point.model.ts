@@ -1,11 +1,5 @@
 import mongoose from "mongoose"
-
-interface Point {
- location: {
-  name: string,
-  placeId: string
- }
-}
+import { Point } from "../types/Point";
 
 const pointSchema = new mongoose.Schema<Point>({
  location: {
@@ -16,4 +10,4 @@ const pointSchema = new mongoose.Schema<Point>({
 
 const PointModel = mongoose.model('Point', pointSchema);
 
-export { Point, PointModel, pointSchema};
+export { PointModel, pointSchema};

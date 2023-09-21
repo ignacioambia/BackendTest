@@ -1,10 +1,6 @@
 import mongoose, { Document } from 'mongoose';
 import EmailValidator from 'email-validator';
-
-interface User extends Document {
- email: string,
- password: string
-}
+import { User } from "../types/User";
 
 const userSchema = new mongoose.Schema<User>({
   email: {
