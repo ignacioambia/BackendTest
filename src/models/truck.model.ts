@@ -1,14 +1,5 @@
 import mongoose from "mongoose"
-
-interface Truck {
-
-model: string,
-make: string,
-year: number,
-color: string,
-transportWeight: number,
-created_at: Date
-}
+import { Truck } from "../types/Truck";
 
 const truckSchema = new mongoose.Schema<Truck>({
  model: String,
@@ -24,4 +15,4 @@ const truckSchema = new mongoose.Schema<Truck>({
 
 const TruckModel = mongoose.model('Truck', truckSchema);
 
-export { Truck, TruckModel, truckSchema};
+export { TruckModel, truckSchema};
