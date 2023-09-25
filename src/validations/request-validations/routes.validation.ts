@@ -1,5 +1,5 @@
 import { RequestValidation } from "../../types/RequestValidation";
-import { CustomJoi } from "../joi-extensions"
+import { CustomJoi } from "../joi-extensions";
 
 export const routeSchema = CustomJoi.object({
  from: CustomJoi.objectId().required(),

@@ -1,4 +1,4 @@
-import mongoose, { Schema, SchemaDefinition, SchemaDefinitionType, Types } from "mongoose"
+import mongoose, { SchemaDefinition, SchemaDefinitionType, Types } from "mongoose"
 import { PointModel } from "./point.model";
 import { Route } from "../types/Route";
 
