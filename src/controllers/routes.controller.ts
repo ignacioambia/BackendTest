@@ -251,3 +251,31 @@ export async function getCoordinates(
   }
 }
 
+export async function getRouteDistance(req: Request<{id: string}>, res: Response){
+  try {
+    const [route] = await getRoutesDetails({
+      _id: new Types.ObjectId(req.params.id),
+    }) as any[];
+
+    const getGoogleDistance = async (placeIdOrigin: string, placeIdDest: string) => {
+        const client = new Client({});
+        const result = await client.directions({
+          params: {
+          origin: `place_id:${placeIdOrigin}`,
+          destination: `place_id:${placeIdDest}`,
+          key: process.env.GOOGLE_MAPS_API_KEY as string
+          }
+        });
+
+        const [route] = result.data.routes;
+        return route.legs[0].distance.text
+    };
+
+    const distance = await getGoogleDistance(route.from.location.placeId,route.to.location.placeId)
+    route.distance = distance;
+    res.json(route);
+  } catch (error) {
+    return res.status(500).json({ error: "Error getting coordinates" });
+  }
+  
+}

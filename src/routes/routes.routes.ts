@@ -24,6 +24,13 @@ router.get(
 
 )
 
+router.get(
+  '/distance/:id',
+  verifyRequest(Validation.getSingleRoute),
+  idExists(RouteModel),
+  Controller.getRouteDistance
+)
+
 router.post(
   "/",
   verifyRequest(Validation.newRoute),
