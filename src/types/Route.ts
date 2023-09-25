@@ -2,5 +2,6 @@ import { Schema } from "mongoose";
 
 export interface Route {
  from: Schema.Types.ObjectId,
- to: string
+ to: Schema.Types.ObjectId,
+ deleted?: boolean
 }
