@@ -1,15 +1,33 @@
+import { Point } from './../types/Point';
+import { objectId } from 'joi';
 import { NextFunction, Request, Response } from "express";
 import { Route } from "../types/Route";
 import { PointModel } from "../models/point.model";
 import { RouteModel } from "../models/route.model";
 import { FilterQuery, Types } from "mongoose";
+import {Client} from "@googlemaps/google-maps-services-js";
+
+interface PointResponse {
+  _id: string,
+  location: {
+      name: string,
+      placeId: string
+  }
+}
+
+interface RouteResponse {
+  _id: string,
+  from: PointResponse,
+  to: PointResponse
+}
+
 
 /**
  * Returns routes with it's corresponding details
  * @param filterQuery object that contains the fileter criteria to get orders
  * @returns 
  */
-export async function getRoutesDetails(filterQuery: FilterQuery<Route> = {}) {
+export async function getRoutesDetails(filterQuery: FilterQuery<Route> = {}): Promise<RouteResponse[]> {
   const searchActiveOrders = {deleted: false};
 
   return RouteModel.aggregate([
@@ -194,3 +212,42 @@ export async function deleteRoute(req: Request<{id: string}>, res: Response) {
   return res.json({message: `Route "${id}" deleted.`})
 
 }
+/**
+ * Reads the params.id, then get the different place id,
+ * request lat, lng to google and sends response
+ * */
+export async function getCoordinates(
+  req: Request<{ id: string }>,
+  res: Response
+) {
+  try {
+    const [route] = await getRoutesDetails({
+      _id: new Types.ObjectId(req.params.id),
+    });
+
+    const getGoogleCoordinates = async (placeId: string) => {
+      const client = new Client({});
+
+      const result = await client.placeDetails({
+        params: {
+          place_id: placeId,
+          key: process.env.GOOGLE_MAPS_API_KEY as string,
+        },
+      });
+      return result.data.result.geometry?.location;
+    };
+
+    const [fromCoords, toCoords] = await Promise.all([
+      getGoogleCoordinates(route.from.location.placeId),
+      getGoogleCoordinates(route.to.location.placeId),
+    ]);
+
+    route.from.location = {...route.from.location, ...fromCoords};
+    route.to.location = {...route.to.location, ...toCoords};
+
+    res.json(route);
+  } catch (error) {
+    return res.status(500).json({ error: "Error getting coordinates" });
+  }
+}
+

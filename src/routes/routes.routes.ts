@@ -16,6 +16,14 @@ router.get(
   Controller.getSpecificRoute
 );
 
+router.get(
+  '/coordinates/:id',
+  verifyRequest(Validation.getSingleRoute),
+  idExists(RouteModel),
+  Controller.getCoordinates
+
+)
+
 router.post(
   "/",
   verifyRequest(Validation.newRoute),
