@@ -54,6 +54,7 @@ router.delete(
   "/:id",
   verifyRequest(Validation.deleteRoute),
   idExists(RouteModel,true),
+  Controller.canDeleteRoute,
   Controller.deleteRoute
 );
 
