@@ -1,11 +1,11 @@
-import { Point } from './../types/Point';
-import { objectId } from 'joi';
 import { NextFunction, Request, Response } from "express";
 import { Route } from "../types/Route";
 import { PointModel } from "../models/point.model";
 import { RouteModel } from "../models/route.model";
-import { FilterQuery, Types } from "mongoose";
+import { FilterQuery, Types, Document } from "mongoose";
 import {Client} from "@googlemaps/google-maps-services-js";
+import { OrderModel } from "../models/order.model";
+import { OrderStatus } from "../types/Order";
 
 interface PointResponse {
   _id: string,
@@ -279,6 +279,33 @@ export async function getRouteDistance(req: Request<{id: string}>, res: Response
     res.json(route);
   } catch (error) {
     return res.status(500).json({ error: "Error getting coordinates" });
+  }
+  
+}
+
+export async function canDeleteRoute(
+  req: Request<{ id: string }>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const route = req.element as Document & Route;
+    const active_orders = await OrderModel.find({
+      route: route.id,
+      deleted: false,
+      status: OrderStatus.InProgress,
+    }).select("_id");
+    if (active_orders.length) {
+      return res
+        .status(400)
+        .json({
+          error: `Can't delete route "${route.id}" as there are orders in progress. with this route. `,
+          extras: { active_orders: active_orders.map((e) => e._id) },
+        });
+    }
+    next();
+  } catch (e) {
+    res.status(500).json({ error: "Internal server error" });
   }
   
 }
