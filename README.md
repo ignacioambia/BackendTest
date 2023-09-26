@@ -7,6 +7,8 @@ This is a simple node backend projects to demonstrate my abilities as a backend 
 
 ## The process that was done to deploy project
 
+Deploy en: http://54.82.238.8:3000/orders
+
 WHERE THE PROJECT IS DEPLOYED
 LIST OF ALL CHANGES
 PROCEDIMIENTO PARA HACER ESTA PRACTICA
