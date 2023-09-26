@@ -4,11 +4,6 @@
 
 The `{{baseUrl}}/routes` URL contains endpoints related to manage routes.
 
-get '/coordinates/:id',
-get /distance/:id,
-post "/
-put "/:id",
-delete "/:id",
 
 ## /routes (GET)
 
