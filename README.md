@@ -1,32 +1,67 @@
 # Backend project
 
-This is a simple node backend projects to demonstrate my abilities as a backend developer at BeGo
+This is a node backend project to demonstrate my abilities as a backend developer at BeGo.
+You can find this project deployed by entering to [this url][deploy-url]. Note that this url  points to `/orders` url but url for the projects is just `/`.
+This folder is completely written using typescript.
 
-## How to run dev 
+This project works using [Express.js][express] and [MongoDB][mongo-cluster]
+
+The app is separated into 5 different modules:
+- Auth
+- Points
+- Trucks
+- Routes
+- Orders
+
+You can get to know more about them going to the [docs folder][docs-folder].
+
+## Run project for development
+ In the root of the project run `npm run dev`. This will start running nodemong configured for typescript.
+ Add a .env file at the root of the project with the following keys:
+ ```.env
+   MONGO_CONNECT=<your mongodb url/ database name (in my case prod or dev)>
+   ENV=<dev or prod>
+   GOOGLE_MAPS_API_KEY=google maps key
+   JWT_SECRET_KEY=<A custom serial number to run the project>
+```
 ## How to build project
+ **Steps:**
+ - Run `npm install` to install all dependencies for the project.
+ - Run `npm run build` to run tsc to bundle our typescript code into javascript code.
+ - Run `npm start` to start running the project. By default it will run in port `3000`.
 
-## The process that was done to deploy project
+## My process of deployment
+ - Created an [EC2 instance][ec2] from AWS.
+ - Created a [MongoDB] cluster where the information is stored.
+ - Created a service inside my ec2 to always run my node project
+ - In the [EC2 instance][ec2] I installed git and npm to get and isntall the project.
+ - Every time i want a deploy i enter to the instance and run `npm i` then `npm run build`. This is enough so that the service running the project catches this changes and runs them in production now.
+ - Created an `.env` file where sensible information is stored.
+ - 
 
-Deploy en: http://54.82.238.8:3000/orders
 
-WHERE THE PROJECT IS DEPLOYED
-LIST OF ALL CHANGES
-PROCEDIMIENTO PARA HACER ESTA PRACTICA
-EXPLICA QUE HAY UNA RAMA POR CADA FEATURE AGREGADO
-Explica que por cada cambio se hizo un PR 
-Explica que las ramas siguen arriba y que cada modulo tuvo su rama
-INDICA QUE APROPOISTO NO BORRASTE NADA DE LAS BRANCHES!
-Explica el proceso de compilamiento
-que mejorarias? 
- En los archivos no utilizar kebab-case si no camel case ya que se alinea mas con lo que se hace en javascript
+## The process of creating the project
+ - Started a brand new project and installed [express][express], [mongoose][mongoose] & [typescript][typescript].
+ - Created an `index.ts` file where all my routes are imported with a authorization middleware.
+ - Created a `controller` file for every route.
+ - Created a branch for every new module created.
+ - Got a [Google maps API key][google-key] to access geolocation and distance between routes.
+ - For every module in this project you will find a branch in this github repository.
 
-CHECA QUE SI ACTUALIZAS LA RUTA, NO HAYA YA UNA CON ESOS VALORES EXISTENTES
-Cosas a considerar: Si cambias los valores de un ruta, estas cambiando propiamente la ruta
-hace falta logging errors
-throw error if we want to delete a route but it already exists
-El token no expira
-Explain how reques validation middleware works
-Te faltó centralizar el manejo de errores
-Hace falta no eliminar una ruta si esta siendo usada en una orden
-Talvez deberias de regresar mejores mensajes cuando todo salió bien
-Que puede salir mal? Que tal que el middleware de object id falla por culpa de que pides el deleted
+## Things i would improve
+ - Use camelCase instead of kebab-case as it is more common in javascript projects.
+ - If i change a route, i am changing the route of all orders having that route.
+ - Error logs is missing.
+ - JWT tokens don't expire.
+ - Centrailize the way  a `400` error status is sent.
+ - Have a standard way to respond the user in a successfull petition.
+
+
+[deploy-url]:http://54.82.238.8:3000/orders
+[docs-folder]:./docs
+[ec2]:https://aws.amazon.com/es/ec2/
+[mongo-cluster]:https://www.mongodb.com/basics/clusters
+[express]:https://expressjs.com/
+[mongoose]:https://mongoosejs.com/
+[typescript]:https://www.typescriptlang.org/
+[google-key]:https://developers.google.com/maps/documentation/javascript/get-api-key?hl=es-419
