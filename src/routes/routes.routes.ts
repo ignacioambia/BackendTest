@@ -12,14 +12,14 @@ router.get("/", Controller.getAllRoutes);
 router.get(
   "/:id",
   verifyRequest(Validation.getSingleRoute),
-  idExists(RouteModel),
+  idExists(RouteModel, true),
   Controller.getSpecificRoute
 );
 
 router.get(
   '/coordinates/:id',
   verifyRequest(Validation.getSingleRoute),
-  idExists(RouteModel),
+  idExists(RouteModel,true),
   Controller.getCoordinates
 
 )
@@ -27,7 +27,7 @@ router.get(
 router.get(
   '/distance/:id',
   verifyRequest(Validation.getSingleRoute),
-  idExists(RouteModel),
+  idExists(RouteModel, true),
   Controller.getRouteDistance
 )
 
@@ -43,7 +43,7 @@ router.post(
 router.put(
   "/:id",
   verifyRequest(Validation.editRoute),
-  idExists(RouteModel),
+  idExists(RouteModel,true),
   Controller.routeAlreadyExists,
   Controller.checkRouteRules,
   Controller.verifyPoints,
@@ -53,7 +53,7 @@ router.put(
 router.delete(
   "/:id",
   verifyRequest(Validation.deleteRoute),
-  idExists(RouteModel),
+  idExists(RouteModel,true),
   Controller.deleteRoute
 );
 

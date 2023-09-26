@@ -21,18 +21,11 @@ interface RouteResponse {
   to: PointResponse
 }
 
-
-/**
- * Returns routes with it's corresponding details
- * @param filterQuery object that contains the fileter criteria to get orders
- * @returns 
- */
-export async function getRoutesDetails(filterQuery: FilterQuery<Route> = {}): Promise<RouteResponse[]> {
-  const searchActiveOrders = {deleted: false};
-
-  return RouteModel.aggregate([
+export function getRouteAggregation(filterQuery: FilterQuery<Route> = {}, onlyActiveRoutes: boolean = false){
+  const searchActiveRoutes = { deleted: onlyActiveRoutes};
+  return [
     {
-      $match: {...filterQuery, ...searchActiveOrders},
+      $match: {...filterQuery, ...searchActiveRoutes},
     },
     {
       $lookup: {
@@ -62,7 +55,17 @@ export async function getRoutesDetails(filterQuery: FilterQuery<Route> = {}): Pr
         to: 1
       }
     }
-  ]);
+  ]
+}
+
+
+/**
+ * Returns routes with it's corresponding details
+ * @param filterQuery object that contains the fileter criteria to get orders
+ * @returns 
+ */
+export async function getRoutesDetails(filterQuery: FilterQuery<Route> = {}): Promise<RouteResponse[]> {
+  return RouteModel.aggregate(getRouteAggregation(filterQuery));
 }
 
 /**
@@ -127,7 +130,7 @@ export async function getSpecificRoute(
     const [route] = await getRoutesDetails({
       _id: new Types.ObjectId(req.params.id),
     });
-    return res.status(200).json(route);
+    return res.json(route);
   } catch (error) {
     return res
       .status(500)
@@ -190,7 +193,7 @@ export async function editRoute(req: Request<{ id: string }, {}, Route>, res: Re
     route.to = to;
 
     const updatedRoute = await route.save();
-    return res.status(200).json(await getRoutesDetails({_id: updatedRoute._id}));
+    return res.json(await getRoutesDetails({_id: updatedRoute._id}));
 
   } catch (error) {}
 }
