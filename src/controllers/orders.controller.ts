@@ -1,4 +1,4 @@
-import { Order } from './../types/Order';
+import { Order, OrderStatus } from './../types/Order';
 import { Request, Response, NextFunction } from "express";
 import { RouteModel } from "../models/route.model";
 import { OrderModel } from "../models/order.model";
@@ -146,4 +146,38 @@ export async function editOrder(req: Request<{id: string}>, res: Response){
     return res.status(500).json({error: 'Error fetching orders', e});
   }
 
+}
+
+export async function canStartOrder(req: Request<{id: string}>, res: Response, next: NextFunction){
+  const order = req.element as Document & Order;
+  if(order.status === OrderStatus.Finished){
+    return res.status(400).json({error : "Order already finished."});
+  }
+
+  if(!order.truck){
+    return res.status(400).json({error: "First assign a truck."});
+  }
+  next();
+}
+
+export async function startOrder(req: Request<{id: string}>, res: Response){
+  const order = req.element as Document & Order;
+  order.status = OrderStatus.InProgress;
+  await order.save();
+  return res.json({message: "Order is now in progress."});
+}
+
+export async function canEndOrder(req: Request<{id: string}>, res: Response, next: NextFunction){
+  const order = req.element as Document & Order;
+  if(order.status === OrderStatus.Created){
+    return res.status(400).json({error : "In order to end an order you must start it first."});
+  }
+  next();
+}
+
+export async function endOrder(req: Request<{id: string}>, res: Response){
+  const order = req.element as Document & Order;
+  order.status = OrderStatus.Finished;
+  await order.save();
+  return res.json({message: 'Order finished'});
 }

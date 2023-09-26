@@ -38,8 +38,20 @@ router.put(
   Controller.assignTruck
 )
 
-//edit order
-// change status
-//edit order
+router.put(
+  "/start/:id",
+  verifyRequest(Validation.getSingleOrder),
+  idExists(OrderModel),
+  Controller.canStartOrder,
+  Controller.startOrder
+);
+
+router.put(
+  "/end/:id",
+  verifyRequest(Validation.getSingleOrder),
+  idExists(OrderModel),
+  Controller.canEndOrder,
+  Controller.endOrder
+);
 
 export default router;

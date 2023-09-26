@@ -4,7 +4,7 @@ export type OrderType = 'type1' | 'type2' | 'type3';
 
 export enum OrderStatus  {
  Created = 0,
- Progress =1,
+ InProgress =1,
  Finished =2
 }
 
