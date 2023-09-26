@@ -4,7 +4,9 @@ This is a node backend project to demonstrate my abilities as a backend develope
 You can find this project deployed by entering to [this url][deploy-url]. Note that this url  points to `/orders` url but url for the projects is just `/`.
 This folder is completely written using typescript.
 
-This project works using [Express.js][express] and [MongoDB][mongo-cluster]
+This project works using [Express.js][express] and [MongoDB][mongo-cluster].
+
+You can find a Postman collection of all endpoints in the root of the project named `BackendTes.postman_collection.json`.
 
 The app is separated into 5 different modules:
 - Auth
