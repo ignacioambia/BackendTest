@@ -20,7 +20,12 @@ const orderSchema = new mongoose.Schema<Order>({
   type: Number,
   enum: Object.values(OrderStatus).filter((e)=> typeof e == 'number' ), // Enum validation
   default: OrderStatus.Created, // Default value
-},});
+},
+deleted: {
+  type: Boolean,
+  default: false
+ }
+});
 
 const OrderModel = mongoose.model('Order', orderSchema);
 

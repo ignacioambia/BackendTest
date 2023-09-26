@@ -13,7 +13,7 @@ router.get("/", Controller.getAllOrders);
 router.get(
   "/:id",
   verifyRequest(Validation.getSingleOrder),
-  idExists(OrderModel),
+  idExists(OrderModel, true),
   Controller.getSingleOrder
 );
 
@@ -26,7 +26,8 @@ router.post(
 
 router.put("/:id",
   verifyRequest(Validation.editTruck),
-  idExists(OrderModel),
+  idExists(OrderModel, true),
+  Controller.canAlterOrder,
   Controller.routeExists,
   Controller.editOrder
 );
@@ -34,14 +35,14 @@ router.put("/:id",
 router.put(
   "/assign_truck/:id",
   verifyRequest(Validation.assignTruck),
-  idExists(OrderModel),
+  idExists(OrderModel, true),
   Controller.assignTruck
 )
 
 router.put(
   "/start/:id",
   verifyRequest(Validation.getSingleOrder),
-  idExists(OrderModel),
+  idExists(OrderModel, true),
   Controller.canStartOrder,
   Controller.startOrder
 );
@@ -49,9 +50,17 @@ router.put(
 router.put(
   "/end/:id",
   verifyRequest(Validation.getSingleOrder),
-  idExists(OrderModel),
+  idExists(OrderModel, true),
   Controller.canEndOrder,
   Controller.endOrder
 );
+
+router.delete(
+  "/:id",
+  verifyRequest(Validation.getSingleOrder),
+  idExists(OrderModel, true),
+  Controller.canAlterOrder,
+  Controller.deleteOrder
+)
 
 export default router;

@@ -13,6 +13,7 @@ export interface Order {
  description: string,
  truck?: Types.ObjectId,
  type: OrderType,
- status: OrderStatus
+ status: OrderStatus,
+ deleted?: boolean
 }
 

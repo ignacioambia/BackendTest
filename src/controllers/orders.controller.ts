@@ -9,10 +9,9 @@ import { TruckModel } from "../models/truck.model";
 export function getOrderDetails(id?: string) {
   const orderQuery: any = {};
   if (id) orderQuery._id = new Types.ObjectId(id);
-  console.log("Order query is: ", orderQuery);
   return OrderModel.aggregate([
     {
-      $match: orderQuery,
+      $match: {...orderQuery, deleted: false},
     },
     {
       $lookup: {
@@ -90,8 +89,9 @@ export async function createOrder(req: Request<{}, {}, Order>, res: Response) {
       type,
       status: 0,
     });
-    const saved = await order.save();
-    res.json(saved);
+    const saved: Document = await order.save();
+    const [savedOrder] = await getOrderDetails(saved._id);
+    res.json(savedOrder);
   } catch (e) {
     res.json(e);
   }
@@ -180,4 +180,19 @@ export async function endOrder(req: Request<{id: string}>, res: Response){
   order.status = OrderStatus.Finished;
   await order.save();
   return res.json({message: 'Order finished'});
+}
+
+export async function canAlterOrder(req: Request<{id: string}>, res: Response, next: NextFunction){
+  const order = req.element as Document & Order;
+  if(order.status === OrderStatus.InProgress){
+    return res.status(400).json({error: "Can't alter order while it is in progress."});
+  }
+  next();
+}
+
+export async function deleteOrder(req: Request<{id: string}>, res: Response){
+  const order = req.element as Document & Order;
+  order.deleted = true;
+  await order.save();
+  return res.json({message: "Order deleted successfully.", extras: {order}});
 }
